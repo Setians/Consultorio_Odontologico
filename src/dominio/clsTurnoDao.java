@@ -353,4 +353,9 @@ public class clsTurnoDao {
 		}
 		return cls;
 	}
+	
+	public boolean validarTurno(clsTurno turno, String motivoError)
+	{
+		return true;
+	}
 }

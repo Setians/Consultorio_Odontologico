@@ -119,6 +119,9 @@
 					<li class="sidebar"><a href="ServletObraSocial?"> <i
 							class="fa fa-medkit"></i> <span>Obras Sociales</span>
 					</a></li>
+					<li class="sidebar"><a href="Consultorio-Reportes.jsp"> <i
+							class="fa fa-exclamation-circle"></i> <span>Reportes</span>
+					</a></li>
 				</ul>
 			</div>
 			<!-- sidebar-menu  -->

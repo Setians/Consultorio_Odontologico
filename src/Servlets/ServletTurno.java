@@ -170,7 +170,7 @@ public class ServletTurno extends HttpServlet {
 				        //out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script");
 				        out.println("<script>");
 				        out.println("$(document).ready(function(){");
-				        out.println("swal('Error al guardar obra social','Error de conexión','error');");
+				        out.println("swal('Error al guardar turno','Error de conexión','error');");
 				        out.println("});");
 				        out.println("</script>");
 				        
@@ -187,7 +187,7 @@ public class ServletTurno extends HttpServlet {
 			        //out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script");
 			        out.println("<script>");
 			        out.println("$(document).ready(function(){");
-			        out.println("swal('Error al guardar obra social', '" + motivoError + "','error');");
+			        out.println("swal('Error al guardar turno', '" + motivoError + "','error');");
 			        out.println("});");
 			        out.println("</script>");
 			        
@@ -247,7 +247,7 @@ public class ServletTurno extends HttpServlet {
 			        out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script");
 			        out.println("<script>");
 			        out.println("$(document).ready(function(){");
-			        out.println("swal('Usuario Guardado Correctamente','','success');");
+			        out.println("swal('Turno Guardado Correctamente','','success');");
 			        out.println("});");
 			        out.println("</script>");
 
@@ -264,7 +264,7 @@ public class ServletTurno extends HttpServlet {
 			        out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script");
 			        out.println("<script>");
 			        out.println("$(document).ready(function(){");
-			        out.println("swal('Error al guardar el usuario ','','error');");
+			        out.println("swal('Error al modificar el turno ','','error');");
 			        out.println("});");
 			        out.println("</script>");
 			        
@@ -282,7 +282,7 @@ public class ServletTurno extends HttpServlet {
 		        //out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script");
 		        out.println("<script>");
 		        out.println("$(document).ready(function(){");
-		        out.println("swal('Error al guardar el usuario','Fato agregar algun dato','error');");
+		        out.println("swal('Error al modificar el turno','Fato agregar algun dato','error');");
 		        out.println("});");
 		        out.println("</script>");
 		        
@@ -299,6 +299,8 @@ public class ServletTurno extends HttpServlet {
 				HttpSession session = request.getSession();
 				clsUsuario Us= (clsUsuario)session.getAttribute("Session_Ej2");
 				
+				String motivoError = "";
+				boolean validacion = true;
 				clsTurnoDao tdao = new clsTurnoDao();
 				clsTurno turno = new clsTurno();
 				/* String result = LocalTime.parse(request.getParameter("txtHoraInicio"),DateTimeFormatter.ofPattern("hh:mm a",Locale.US )).format( DateTimeFormatter.ofPattern("HH:mm"));
@@ -339,7 +341,68 @@ public class ServletTurno extends HttpServlet {
 				turno.setT_Id(1);
 				turno.setT_Diagnostico("");
 				turno.setT_DniUsuario(Us.getU_DNI());
-				if(tdao.SP_Turno_Alta(turno))
+				
+				
+				// esta validacion no es necesaria pero por las duras
+				ArrayList<clsTurno> turnosPendientes = tdao.Turno_TraerPorDNI_Pendientes(turno.getT_DniUsuario());
+				for (clsTurno turnito : turnosPendientes) {
+					validacion = false;
+					motivoError = "Este usuario ya tiene un turno pendiente el dia " + turnito.getT_fecha().toString() + " a las " + turnito.getT_HoraInicio().toString() + "hs.";
+					break;
+				}
+				
+				
+				if (validacion)
+				{
+					ArrayList<clsTurno> turnosPedientes_todos = tdao.Turno_TraerTodos_Pendientes();
+					for (clsTurno turnito : turnosPedientes_todos) {
+						
+						if(turnito.getT_fecha().equals(turno.getT_fecha()))
+						{
+							if(turnito.getT_HoraInicio().equals(turno.getT_HoraInicio())) 
+							{
+								validacion = false;
+								motivoError = "Este turno no esta disponible, seleccione otro horario.";
+								break;
+							}
+						}
+					}
+				}
+				
+				if(validacion)
+				{
+					if(tdao.SP_Turno_Alta(turno))
+					{
+						response.setContentType("text/html");
+						PrintWriter out = response.getWriter();
+				        out.println("<script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js'></script>");
+				        out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+				        out.println("<script>");
+				        out.println("$(document).ready(function(){");
+				        out.println("swal('Turno Guardado Correctamente','','success');");
+				        out.println("});");
+				        out.println("</script>");
+				        
+						miDispacher = request.getRequestDispatcher("HomeUsuarioLogueado.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
+				        miDispacher.include(request, response);
+					}
+					else
+					{
+						response.setContentType("text/html");
+						PrintWriter out = response.getWriter();
+				        out.println("<script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js'></script>");
+				        out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+				        out.println("<script>");
+				        out.println("$(document).ready(function(){");
+				        out.println("swal('Error al guardar turno','','error');");
+				        out.println("});");
+				        out.println("</script>");
+						
+						miDispacher = request.getRequestDispatcher("HomeUsuarioLogueado.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
+				        miDispacher.include(request, response);
+					}	
+				}
+				else
 				{
 					response.setContentType("text/html");
 					PrintWriter out = response.getWriter();
@@ -348,21 +411,13 @@ public class ServletTurno extends HttpServlet {
 			        //out.println("<script src='https://unpkg.com/sweetalert/dist/sweetalert.min.js'></script");
 			        out.println("<script>");
 			        out.println("$(document).ready(function(){");
-			        out.println("swal('Usuario Guardado Correctamente','','success');");
+			        out.println("swal('Error al guardar turno', '" + motivoError + "','error');");
 			        out.println("});");
 			        out.println("</script>");
-			        
-			        miDispacher = request.getRequestDispatcher("Consultorio-Turnos.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
-			        miDispacher.include(request, response);
-				}
-				else
-				{
-					// cartel alta de turno fallida
+					
 					miDispacher = request.getRequestDispatcher("HomeUsuarioLogueado.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
 			        miDispacher.include(request, response);
-				}
-				
-			
+				}				
 		}
 		 
 		
@@ -371,12 +426,36 @@ public class ServletTurno extends HttpServlet {
 		{
 
 			clsTurnoDao tdao = new clsTurnoDao();
-			if(tdao.CancelarTurno(Integer.parseInt(request.getParameter("txtIDTurno"))));
+			if(tdao.CancelarTurno(Integer.parseInt(request.getParameter("txtIDTurno"))))
 			{
-		        miDispacher = request.getRequestDispatcher("HomeUsuarioLogueado.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
+				response.setContentType("text/html");
+				PrintWriter out = response.getWriter();
+		        out.println("<script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js'></script>");
+		        out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+		        out.println("<script>");
+		        out.println("$(document).ready(function(){");
+		        out.println("swal('Turno CANCELADO Correctamente','','success');");
+		        out.println("});");
+		        out.println("</script>");
+		        
+				miDispacher = request.getRequestDispatcher("HomeUsuarioLogueado.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
 		        miDispacher.include(request, response);
-		     // cartel desea cancelar turno 
 			}
+			else
+			{
+				response.setContentType("text/html");
+				PrintWriter out = response.getWriter();
+		        out.println("<script src='https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/6.11.4/sweetalert2.all.js'></script>");
+		        out.println("<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>");
+		        out.println("<script>");
+		        out.println("$(document).ready(function(){");
+		        out.println("swal('Error al cancelar turno','','error');");
+		        out.println("});");
+		        out.println("</script>");
+				
+				miDispacher = request.getRequestDispatcher("HomeUsuarioLogueado.jsp"); // Es el archivo JSP al que le vamos a enviar la informacion
+		        miDispacher.include(request, response);
+			}	
 		}
 
 		

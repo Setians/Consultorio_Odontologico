@@ -115,6 +115,9 @@
 					<li class="sidebar"><a href="Consultorio-Turnos.jsp"> <i
 							class="far fa-calendar-alt"></i> <span>Turnos</span>
 					</a></li>
+					<li class="sidebar"><a href="Consultorio-Reportes.jsp"> <i
+							class="fa fa-exclamation-circle"></i> <span>Reportes</span>
+					</a></li>
 				</ul>
 			</div>
 			<!-- sidebar-menu  -->

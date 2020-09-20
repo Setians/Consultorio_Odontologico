@@ -121,6 +121,9 @@
 					<li class="sidebar"><a href="ServletObraSocial?"> <i
 							class="fa fa-medkit"></i> <span>Obras Sociales</span>
 					</a></li>
+					<li class="sidebar"><a href="Consultorio-Reportes.jsp"> <i
+							class="fa fa-exclamation-circle"></i> <span>Reportes</span>
+					</a></li>
 				</ul>
 			</div>
 			<!-- sidebar-menu  -->
@@ -322,7 +325,7 @@
 						</div>
 						<div class="form-group">
 							<!-- <label for="appoin tment_name" class="text-black">Full Name</label> -->
-							<select id="ddlEstado" name="ddlEstado">
+							<select id="ddlEstado" name="ddlEstado" class="form-control">
 								<%
 									ArrayList<clsEstadoObraSocial> lst = ObraSocialDao.EstadoObraSocial_TraerTodos();
 								for (clsEstadoObraSocial obrasocial : lst) {

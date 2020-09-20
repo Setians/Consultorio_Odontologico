@@ -138,7 +138,9 @@ String	redirectURL = "./Home.jsp";
 		         	</li>
 		         	<%
 		    	} %>
-         	
+         	<li class="sidebar"><a href="Consultorio-Reportes.jsp"> <i
+							class="fa fa-exclamation-circle"></i> <span>Reportes</span>
+					</a></li>
         </ul>
       </div>
       <!-- sidebar-menu  -->
@@ -396,6 +398,8 @@ String	redirectURL = "./Home.jsp";
         						 // CONSULTAR SI EL HORARIO ESTA DISPONIBLE 
         						%> <option value="<%=uscli.getU_DNI()%>"><%=uscli.getU_DNI()+" - "+uscli.getU_Apellido()+", "+uscli.getU_Nombre() %></option> <%
         					}
+                    
+                	
                 	}
 					else{
    						
@@ -482,7 +486,6 @@ String	redirectURL = "./Home.jsp";
         var Hfin = $('td', this).eq(4).text();
         var diag = $('td', this).eq(5).text();
 		var Select = $('td', this).eq(6).text();
-		console.log(Select);
         $('#ModalModificar').modal("show");
         $('#Modificar_Paciente').val( paciente);
         $('#Modificar_idTurno').val( id);
