@@ -1,0 +1,20 @@
+.TablaCstm > thead {
+  background-color: #b3ffd7;
+  color: grey;
+}
+.TablaCstm > tbody >tr  {
+  background-color: #59806C !important;
+  color:white;
+}
+
+#tblUsuarios_filter  input[type=search] { 	
+	border-radius: 50px;
+	border: solid  #b3ffd7 1px;                /* Overridden by background-color: white; */
+	line-height: 3 !important;           /* Irrelevant, I guess */
+}
+
+#tblTurnos_filter  input[type=search] { 	
+	border-radius: 50px;
+	border: solid  #b3ffd7 1px;                /* Overridden by background-color: white; */
+	line-height: 3 !important;           /* Irrelevant, I guess */
+}
