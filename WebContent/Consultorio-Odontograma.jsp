@@ -146,6 +146,9 @@ body, a, a:hover {
 					<li class="sidebar"><a href="ServletObraSocial?"> <i
 							class="fa fa-medkit"></i> <span>Obras Sociales</span>
 					</a></li>
+					<li class="sidebar"><a href="Consultorio-Reportes.jsp"> <i
+							class="fa fa-exclamation-circle"></i> <span>Reportes</span>
+					</a></li>
 				</ul>
 			</div>
 			<!-- sidebar-menu  -->
@@ -237,9 +240,10 @@ body, a, a:hover {
 				<input type="radio" id="radio3" name="accion" value="borrar" /><label
 					style="color: black !important;" for="radio3">Borrar</label> <input
 					type="radio" id="radio4" name="accion" value="extraccion" /><label
-					style="color: black !important;" for="radio4">Extraccion</label> <input
-					type="radio" id="radio5" name="accion" value="puente" /><label
-					style="color: black !important;" for="radio5">Puente</label>
+					style="color: black !important;" for="radio4">Extraccion</label>
+					<!-- <input type="radio" id="radio5" name="accion" value="puente" />
+					 <label	style="color: black !important;" for="radio5">Puente</label>
+					 -->
 			</div>
 			<br>
 			<div id="canvasesdiv"
@@ -663,11 +667,14 @@ body, a, a:hover {
             //alert(num_diente);
             inicio_x = (num_diente1*med) + (separacion_x*num_diente1) + separacion_x + (med/2);
             fin_x = (num_diente2*med) + (separacion_x*num_diente2) + separacion_x + (med/2);
+            console.log(inicio_x);
+            console.log(fin_x)
             ctx.fillStyle = color_line;
             ctx.beginPath();
             ctx.lineWidth = 4;
             ctx.moveTo(inicio_x,inicio_y);
             ctx.lineTo(fin_x,inicio_y);
+            console.log(inicio_y);
             //ctx.moveTo(inicio_x+40,inicio_y);
             //ctx.lineTo(inicio_x,inicio_y+40);
             ctx.stroke();
