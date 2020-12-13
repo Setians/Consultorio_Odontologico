@@ -389,11 +389,10 @@
 			$('#ModalModificar').modal("show");
 			$('#txtnombre').val(name);
 			$('#txtID').val(id);
-			$("#ddlEstado option").filter(function() {
-				return this.text == Select;
-			}).attr('selected', true);
-			//$('#ddlEstado').html(Select);
-
+			$("select#ddlEstado option").each(function() 
+					{ 
+						this.selected = (this.text == Select);
+					});
 		});
 
 		$(document)
