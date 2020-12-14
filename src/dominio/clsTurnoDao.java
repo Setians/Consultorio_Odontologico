@@ -226,6 +226,44 @@ public class clsTurnoDao {
 		return lista;
 	}
 	
+	public ArrayList<clsTurno> Turno_TraerPorFecha_Pendientes(String fecha)
+	{
+		ArrayList<clsTurno> lista = new ArrayList<clsTurno>();
+		
+		Connection cn = null;
+		try{
+			Class.forName(driver);
+			cn = DriverManager.getConnection(host + dbName, user, pass);
+			CallableStatement cst = cn.prepareCall("CALL SP_TraerTurno_PorFecha_Pendientes(?)");
+			cst.setString(1, fecha);
+			ResultSet resultado = cst.executeQuery();
+			
+			while(resultado.next()){
+				clsTurno cls = new clsTurno();
+				cls.setT_Id(Integer.parseInt(resultado.getString(1)));
+				cls.setT_DniUsuario(Integer.parseInt(resultado.getString(2)));
+				cls.setT_fecha(Date.valueOf(resultado.getString(3)));
+				cls.setT_HoraInicio(resultado.getString(4));
+				cls.setT_HoraFin(resultado.getString(5));
+				cls.setT_Diagnostico(resultado.getString(6));
+				cls.setT_IdEstado(Integer.parseInt(resultado.getString(7)));
+			System.out.print(cls.getT_Id());
+			lista.add(cls);			 
+			 
+			}
+			
+			cn.close();
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+		}
+		return lista;
+	}
+	
 	public ArrayList<clsTurno> Turno_TraerTodos_Pendientes()
 	{
 		ArrayList<clsTurno> lista = new ArrayList<clsTurno>();
@@ -288,6 +326,8 @@ public class clsTurnoDao {
 		return estado;
 		// aca deberiamos retornar algo que confirme si cancelo turno (inserte emoji pensante)
 	}
+	
+	
 	
 	public ArrayList<clsEstadoTurno> EstadoTurno_TraerTodos()
 	{

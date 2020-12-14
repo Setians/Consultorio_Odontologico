@@ -77,8 +77,6 @@ public class ServletTurno extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		
-
-
 		RequestDispatcher miDispacher = null;
 		if(request.getParameter("btnReservarDoctor")!=null)
 		{
@@ -310,16 +308,16 @@ public class ServletTurno extends HttpServlet {
 				
 				*/
 				System.out.println(request.getParameter("txtDia") + " /-/ ");
-				System.out.println(request.getParameter("txtHoraInicio") + " /-/ ");
+				System.out.println(request.getParameter("txtHora") + " /-/ ");
 				
 				Date dt= (Date) Date.valueOf(request.getParameter("txtDia").toString());
 
 				turno.setT_fecha(dt);
-				turno.setT_HoraInicio(request.getParameter("txtHoraInicio"));
+				turno.setT_HoraInicio(request.getParameter("txtHora"));
 				
 				 String hf="";
 				try {
-					String myTime = request.getParameter("txtHoraInicio");
+					String myTime = request.getParameter("txtHora");
 				 SimpleDateFormat df = new SimpleDateFormat("HH:mm");
 				 java.util.Date utilStartDate = df.parse(myTime);
 				 java.sql.Date d = new java.sql.Date(utilStartDate.getTime());	
@@ -458,8 +456,80 @@ public class ServletTurno extends HttpServlet {
 			}	
 		}
 
+		if(request.getParameter("txtDia")!=null && request.getParameter("btnReservar")==null)
+		{
+			response.setContentType( "text/html; charset=iso-8859-1" );
+			PrintWriter out = response.getWriter();
+			
+			clsTurnoDao tdao = new clsTurnoDao();
+			clsTurno turno = new clsTurno();
+			boolean flagPendientes = false;
+			
+			String fecha = request.getParameter("txtDia");
+//			Date dt= (Date) Date.valueOf(request.getParameter("txtDia").toString());
+//			turno.setT_fecha(dt);	
+			
+			ArrayList<clsTurno> turnosPendientes = tdao.Turno_TraerPorFecha_Pendientes(fecha);
+
+			for (clsTurno turnito : turnosPendientes) { flagPendientes = true;}
+			
+			out.println("<select id="+"txtHora"+" name="+"txtHora"+" type="+"time"+" class="+"form-control"+" min="+"09:00"+" max="+"18:00"+" step="+"1200"+" required="+"disabled"+">");
+			out.println("<option value="+""+" selected disabled hidden>"+"--:--"+"</option>");
+			
+			int hr = 10;
+			for(int i=0; i<9; i++){
+				for(int j=0; j<2; j++){
+					if (j==0){
+						
+						// CONSULTAR SI EL HORARIO ESTA DISPONIBLE 
+						String cadenaHora = Integer.toString(hr+i)+":00";
+						String cadenaHoraAux = "";
+						
+						if (flagPendientes) {
+						
+							for (clsTurno turnito : turnosPendientes) {
+													
+								cadenaHoraAux = turnito.getT_HoraInicio();
+								if (!(cadenaHoraAux.equals(cadenaHora)))
+								{
+									out.println("<option value="+cadenaHora+">"+cadenaHora+"</option>");
+								}
+							}
+						}
+						else 
+						{
+							out.println("<option value="+cadenaHora+">"+cadenaHora+"</option>");
+						}
+
+					}
+					else{
+					
+						String cadenaHoraB = Integer.toString(hr+i)+":30";
+						String cadenaHoraBAux = "";
+						
+						if (flagPendientes) {
+							for (clsTurno turnito : turnosPendientes) {
+													
+								cadenaHoraBAux = turnito.getT_HoraInicio();
+								if (!(cadenaHoraBAux.equals(cadenaHoraB)))
+								{
+									out.println("<option value="+cadenaHoraB+">"+cadenaHoraB+"</option>");
+								}							
+							}
+						}
+						else 
+						{
+							out.println("<option value="+cadenaHoraB+">"+cadenaHoraB+"</option>");
+						}
+					}
+				}	 
+			}
+			out.println("</select>");
+			out.println("<span class="+"validity"+"></span>");	
+		}
 		
-		doGet(request, response);
+		
+		//doGet(request, response);
 	}
 
 }

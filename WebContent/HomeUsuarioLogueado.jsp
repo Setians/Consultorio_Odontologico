@@ -247,7 +247,7 @@
 	                <div class="form-group">
 	                	<div class="icon"><span class="ion-ios-calendar"></span></div>
 	                	
-	                  <input type="date" class="form-control" name="txtDia" id="txtDia" placeholder="Dia"  min="<%=dtf.format(localDate)%>" onchange="enable()" required>
+	                  <input type="date" class="form-control" name="txtDia" id="txtDia" placeholder="Fecha"  min="<%=dtf.format(localDate)%>" onchange="enable()" required>
 	                  <span class="validity"></span> 
 	                </div>
 	              </div>
@@ -258,31 +258,8 @@
 	                 <div class="fallbackTimePicker">
 				    <div>
       				<span>
-        			<select id="txtHoraInicio" name="txtHoraInicio" type="time" class="form-control" min="09:00" max="18:00" step="1200" required disabled>
+      				<div id="txtHoraInicio"><div>
         			
-        			<option value="" selected disabled hidden>--:--</option>
-        			<%  
-        			//Element element = doc.getElementById(id);
-        			//clsTurnoDao trDao = new clsTurnoDao();
-        			int hr = 10;
-        			for(int i=0; i<9; i++){
-        				for(int j=0; j<2; j++){
-        					if (j==0){
-
-          						 // CONSULTAR SI EL HORARIO ESTA DISPONIBLE 
-								String cadenaHora = Integer.toString(hr+i)+":00";
-        						%> <option value="<%=cadenaHora%>"><%=cadenaHora%></option> <%
-        					}
-        					else{
-        					
-       						 // CONSULTAR SI EL HORARIO ESTA DISPONIBLE 
-        						
-        					%> <option value="<%=Integer.toString(hr+i)+":30"%>"><%=Integer.toString(hr+i)+":30" %></option> <%}
-        				}
-       				}	  %>
-        
-        			</select>
-        			<span class="validity"></span>
       				</span>
     				</div>
   					</div>
@@ -404,9 +381,23 @@ document.getElementById("txtHoraInicio").disabled = true;
 }
 function enable() {
 document.getElementById("txtHoraInicio").disabled = false;
-
 request.setAttribute("ListaUsuarios", document.getElementById("txtDia").value);
 }
+
+</script>
+
+<script type="text/javascript">
+
+document.getElementById("txtDia").addEventListener("change",function()
+{
+	var fechaVar = $('#txtDia').val();
+	$.post('ServletTurno', $('#txtDia').serialize(),
+		function(responseText)
+		{
+			$('#txtHoraInicio').html(responseText);		
+		}		
+	)
+},false);
 
 
 </script>

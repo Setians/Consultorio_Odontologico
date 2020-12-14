@@ -413,11 +413,11 @@ String	redirectURL = "./Home.jsp";
 
             <div class="form-group">
               <!-- <label for="appointment_name" class="text-black">Full Name</label> -->
-              <input type="text" class="form-control"  id="Modificar_Fecha"   name="Modificar_Fecha" placeholder="Apellido">
+              <input type="text" class="form-control"  id="Modificar_Fecha"   name="Modificar_Fecha" placeholder="Fecha">
             </div>
             <div class="form-group">
               <!-- <label for="appointment_name" class="text-black">Full Name</label> -->
-              <input type="text" class="form-control" id="Modificar_Hinicio"  name="Modificar_Hinicio" placeholder="Telefono">
+              <input type="text" class="form-control" id="Modificar_Hinicio"  name="Modificar_Hinicio" placeholder="Hora Inicio">
             </div>
             <div class="form-group">
               <input type="text" class="form-control" id="Modificar_Diagnostico"  name="Modificar_Diagnostico" placeholder="Diagnostico">
