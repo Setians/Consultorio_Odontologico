@@ -224,7 +224,7 @@
                 
             <div class="form-group">
               <!-- <label for="appointment_email" class="text-black">Email</label> -->
-              <input type="text" class="form-control" id="Registro_email"  name="Registro_email" placeholder="Email"required>
+              <input type="email" class="form-control" id="Registro_email"  name="Registro_email" placeholder="Email"required>
             <span class="validity"></span>
              </div>
             <div class="row">
