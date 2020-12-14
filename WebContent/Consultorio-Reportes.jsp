@@ -10,10 +10,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="Responsive sidebar template with sliding effect and dropdown menu based on bootstrap 3">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Consultorio-Turnos</title>
+<title>Consultorio-Reportes</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,600,700" rel="stylesheet">
 
 <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
 <link rel="stylesheet" href="css/animate.css">
@@ -177,26 +176,16 @@ String	redirectURL = "./Home.jsp";
         </div>
       </div>
     </section>
-
-
-
-
-
-		
-
-		
-		
-		
 		
     <section class="ftco-intro">
     	<div class="container" id="cont_us">
     		<div class="row no-gutters">
 		
 		
-		<div class="col-md-10 color-3 p-4" id = "reportes">
-    				<h3 class="mb-2">Cantidad de turnos:</h3>
-    				<form action="ServletReportes" method="post" class="appointment-form">
+		<div class="col-md-10 color-3 p-3 m-3" id = "reportes">
     				
+    				<form action="ServletReportes" method="post" class="appointment-form">
+    				<h3 class="mb-2">Filtros:</h3>
     				<% DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						LocalDate localDate = LocalDate.now();
 						%>
@@ -212,28 +201,30 @@ String	redirectURL = "./Home.jsp";
 	                  <span class="validity"></span> 
 	                </div>
 	              </div>
-	              
-	              <div class="col-sm-6">
-	                <div class="form-group">
-	                	<div class="icon"><span class="ion-ios-calendar"></span></div>
-	                	
-	                  <input type="date" class="form-control" name="txtHasta" id="txtHasta" placeholder="Hasta"  max="<%=dtf.format(localDate)%>" onchange="enable()" required>
-	                  <span class="validity"></span> 
-	                </div>
-	              </div>
-	              
 	            </div>
+	            <div>
 	            
-	            <div class="form-group"> Finalizados: 
-              		<input type="text" class="form-control" id="Finalizados" placeholder="" readonly>
-            	</div> Cancelados: 
-            	<div class="form-group">
-              		<input type="text" class="form-control" id="Cancelados" placeholder="Apellido y Nombre" readonly>
-           		</div>
-
-	            
-	            <div class="form-group">
-	              <input type="submit" name="btnCalcular" value="Calcular" class="btn btn-primary">
+	            <h3 class="mb-2">Turnos:</h3>
+	            <div class="form-check">
+					  <input type="radio" class="form-check-input" id="FCliente" name="groupOfMaterialRadios" onclick="calc()">
+					  <label class="form-check-label" for="FCliente">Por Cliente</label>
+					</div>
+					
+					<!-- Group of material radios - option 2 -->
+					<div class="form-check">
+					  <input type="radio" class="form-check-input" id="FMes" name="groupOfMaterialRadios" onclick="calc()">
+					  <label class="form-check-label" for="FMes">Por Mes</label>
+					</div>
+					
+					<!-- Group of material radios - option 3 -->
+					<div class="form-check">
+					  <input type="radio" class="form-check-input" id="FObraSocial" name="groupOfMaterialRadios" onclick="calc()">
+					  <label class="form-check-label" for="FObraSocial">Por Obra Social</label>
+					</div>
+					<div class="form-check">
+					  <input type="radio" class="form-check-input" id="FCUsuario" name="groupOfMaterialRadios" onclick="calc()">
+					  <label class="form-check-label" for="FCUsuario">Porcentaje de Cancelacion por Usuario</label>
+					</div>
 	            </div>
 	          </form>
     			</div>
@@ -241,8 +232,19 @@ String	redirectURL = "./Home.jsp";
 		</div>>
 		</div>>
 		
-		</sectio>
+		</section>
 		
+		<section class="ftco-section ftco-services">
+		<div class="container pb-5">
+			<h1>Resultado:</h1>
+			<div class="table-responsive">
+				<table id="tblUsuarios"
+					class="table TablaCstm  table-striped table-hover responsive ">
+					
+				</table>
+			</div>
+		</div>
+		</section>
 		
 	</div>
 
@@ -277,33 +279,53 @@ String	redirectURL = "./Home.jsp";
 	<script src="js/bootstrap-datepicker.js"></script>
 	<script src="js/jquery.timepicker.min.js"></script>
 	<script src="js/scrollax.min.js"></script>
-	<script
-		src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
-	<script src="js/google-map.js"></script>
 	<script src="js/main.js"></script>
 	<script src="js/pro-sidebar.js"></script>
 	<script type="text/javascript"
 		src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
 
 	<script type="text/javascript">
-		$('#tblUsuarios  tbody').on('click', 'tr', function() {
-			var name = $('td', this).eq(1).text();
-			var id = $('td', this).eq(0).text();
-			var apellido = $('td', this).eq(2).text();
-			var email = $('td', this).eq(3).text();
-			var telefono = $('td', this).eq(4).text();
-			var Select = $('td', this).eq(5).text();
-			$('#ModalModificar').modal("show");
-			$('#Modificar_nombre').val(name);
-			$('#Modificar_DNI').val(id);
-			$("#Modificar_Tipo option").filter(function() {
-			    return this.text == Select; 
-			}).attr('selected', true);
-			$('#Modificar_apellido').val(apellido);
-			$('#Modificar_telefono').val(telefono);
-			$('#Modificar_email').val(email);
-
-		});
+	
+	
+	function calc()
+	{
+	  if (document.getElementById('FCliente').checked) 
+	  {
+	      $.post('ServletReportes', {
+				btn : "FCliente"
+			}, function(responseText) {
+				$('#tblUsuarios').html(responseText);
+			});
+	      //table.draw();
+	  } 
+	  else if(document.getElementById('FMes').checked) {
+		  $.post('ServletReportes', {
+				btn : "FMes"
+			}, function(responseText) {
+				$('#tblUsuarios').html(responseText);
+			});
+	  }
+	  else if(document.getElementById('FObraSocial').checked)
+	  {
+		  $.post('ServletReportes', {
+				btn : "FObraSocial"
+			}, function(responseText) {
+				$('#tblUsuarios').html(responseText);
+			});
+	  }
+	  else if(document.getElementById('FCUsuario').checked)
+	  {
+		  $.post('ServletReportes', {
+				btn : "FCUsuario"
+			}, function(responseText) {
+				$('#tblUsuarios').html(responseText);
+			});
+		  //var table = $('#tblUsuarios').DataTable();
+		  //table.column( 2 ).visible( false);
+		  //table.column(2).visible(!column.visible());
+		  //table// .clear()//.draw(); 
+	  }
+	}
 
 		$(document)
 				.ready(
@@ -324,11 +346,6 @@ String	redirectURL = "./Home.jsp";
 												}
 
 											});
-
-							// $('#tblUsuarios_filter').addClass('input-group');
-							// $('#tblUsuarios_filter').append('<div id="divIconSearch" class="input-group-append"></div>'); 
-							// $('#divIconSearch').append('<span id="spanIconSearch" class="input-group-text"></span>');
-							//$('#divIconSearch').append('<i class="fa fa-search aria-hidden="true"></i>'); 
 						});
 	</script>
 

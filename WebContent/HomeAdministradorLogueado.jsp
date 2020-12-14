@@ -368,22 +368,28 @@
 		src="https://cdn.datatables.net/v/dt/dt-1.10.18/datatables.min.js"></script>
 
 	<script type="text/javascript">
-		$('#tblUsuarios  tbody').on('click', 'tr', function() {
-			var name = $('td', this).eq(1).text();
-			var id = $('td', this).eq(0).text();
-			var apellido = $('td', this).eq(2).text();
-			var email = $('td', this).eq(3).text();
-			var telefono = $('td', this).eq(4).text();
-			var Select = $('td', this).eq(5).text();
+		$('#tblUsuarios  tbody').on('click', 'td', function() {
+			if((parseInt( $(this).index() ) + 1) != 7)
+			{
+			var row= ( $(this).parent());
+			var name = $('td', row).eq(1).text();
+			var id = $('td', row).eq(0).text();
+			var apellido = $('td', row).eq(2).text();
+			var email = $('td', row).eq(3).text();
+			var telefono = $('td', row).eq(4).text();
+			var Select = $('td', row).eq(5).text();
 			$('#ModalModificar').modal("show");
 			$('#Modificar_nombre').val(name);
 			$('#Modificar_DNI').val(id);
-			$("#Modificar_Tipo option").filter(function() {
-			    return this.text == Select; 
-			}).attr('selected', true);
+			$("select#Modificar_Tipo option").each(function() 
+					{ 
+						this.selected = (this.text == Select);
+					});
 			$('#Modificar_apellido').val(apellido);
 			$('#Modificar_telefono').val(telefono);
 			$('#Modificar_email').val(email);
+			}
+	        
 
 		});
 
