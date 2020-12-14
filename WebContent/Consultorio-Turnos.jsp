@@ -321,39 +321,15 @@ String	redirectURL = "./Home.jsp";
 	       
 	       
            <div class="form-group">
-	                <div class="icon"><span class="ion-ios-clock"></span></div>
-	                 <div class="fallbackTimePicker">
-				    <div>
-      				<span>
-        			<select id="txtHoraInicio" name="txtHoraInicio" type="time" class="form-control" min="09:00" max="18:00" step="1200" required disabled>
-        			
-        			<option value="" selected disabled hidden>--:--</option>
-        			<%  
-        			//Element element = doc.getElementById(id);
-        			//clsTurnoDao trDao = new clsTurnoDao();
-        			int hr = 10;
-        			for(int i=0; i<9; i++){
-        				for(int j=0; j<2; j++){
-        					if (j==0){
-
-          						 // CONSULTAR SI EL HORARIO ESTA DISPONIBLE 
-								String cadenaHora = Integer.toString(hr+i)+":00";
-        						%> <option value="<%=cadenaHora%>"><%=cadenaHora%></option> <%
-        					}
-        					else{
-        					
-       						 // CONSULTAR SI EL HORARIO ESTA DISPONIBLE 
-        						
-        					%> <option value="<%=Integer.toString(hr+i)+":30"%>"><%=Integer.toString(hr+i)+":30" %></option> <%}
-        				}
-       				}	  %>
-        
-        			</select>
-        			<span class="validity"></span>
-      				</span>
+	        	<div class="icon"><span class="ion-ios-clock"></span></div>
+	       		<div class="fallbackTimePicker">
+				   	<div>
+      					<span>
+      					<div id="txtHoraInicio"></div>      				
+      					</span>
     				</div>
-  					</div>
-  					</div>
+  				</div>
+  			</div>
 
 						<div class="form-group">
 							<input type="submit" value="Guardar Reserva" name="btnReservarDoctor"
@@ -412,13 +388,20 @@ String	redirectURL = "./Home.jsp";
             </div>
 
             <div class="form-group">
-              <!-- <label for="appointment_name" class="text-black">Full Name</label> -->
-              <input type="text" class="form-control"  id="Modificar_Fecha"   name="Modificar_Fecha" placeholder="Fecha">
-            </div>
+	                	<div class="icon"><span class="ion-ios-calendar"></span></div>
+	                  <input type="date" class="form-control" name="Modificar_Fecha" id="Modificar_Fecha" placeholder="Dia"  min="<%=dtf.format(localDate)%>" onchange="enableMod()" required>
+	                  <span class="validity"></span> 
+	       </div>
             <div class="form-group">
-              <!-- <label for="appointment_name" class="text-black">Full Name</label> -->
-              <input type="text" class="form-control" id="Modificar_Hinicio"  name="Modificar_Hinicio" placeholder="Hora Inicio">
-            </div>
+	        	<div class="icon"><span class="ion-ios-clock"></span></div>
+	       		<div class="fallbackTimePicker">
+				   	<div>
+      					<span>
+      					<div id="Modificar_Hinicio"></div>      				
+      					</span>
+    				</div>
+  				</div>
+  			</div>
             <div class="form-group">
               <input type="text" class="form-control" id="Modificar_Diagnostico"  name="Modificar_Diagnostico" placeholder="Diagnostico">
             </div>            
@@ -433,7 +416,7 @@ String	redirectURL = "./Home.jsp";
         	     <% if(lst != null) {
                     for (clsEstadoTurno estado : lst) { %>
         						
-        						<option id="selectEstado" value="<%=estado.getU_Id()%>" >	<%=estado.getU_Detalle()%>	</option>
+        						<option  value="<%=estado.getU_Id()%>" >	<%=estado.getU_Detalle()%>	</option>
         						 
         				<%	}
                 	}%>
@@ -486,6 +469,7 @@ String	redirectURL = "./Home.jsp";
         var Hfin = $('td', this).eq(4).text();
         var diag = $('td', this).eq(5).text();
 		var Select = $('td', this).eq(6).text();
+		console.log(Select);
         $('#ModalModificar').modal("show");
         $('#Modificar_Paciente').val( paciente);
         $('#Modificar_idTurno').val( id);
@@ -493,10 +477,10 @@ String	redirectURL = "./Home.jsp";
         $('#Modificar_Hinicio').val( Hinicio);
         $('#Modificar_Hfin').val( Hfin);
         $('#Modificar_Diagnostico').val( diag);
-        $('#Modificar_Estado').filter(function() {
-		    return this.text == Select; 
-		}).attr('selected', true);
-
+        $("select#Modificar_Estado option").each(function() 
+				{ 
+					this.selected = (this.text == Select);
+				});
     });
       $(document).ready( function () {
           $('#tblTurnos').DataTable({
@@ -528,6 +512,36 @@ request.setAttribute("ListaUsuarios", document.getElementById("txtDia").value);
 
 }
 
+function enableMod() {
+	document.getElementById("Modificar_Hinicio").disabled = false;
+	request.setAttribute("ListaUsuarios", document.getElementById("txtDia").value);
+}
+
+</script>
+
+<script type="text/javascript">
+
+document.getElementById("txtDia").addEventListener("change",function()
+{
+	var fechaVar = $('#txtDia').val();
+	$.post('ServletTurno', $('#txtDia').serialize(),
+		function(responseText)
+		{
+			$('#txtHoraInicio').html(responseText);		
+		}		
+	)
+},false);
+
+document.getElementById("Modificar_Fecha").addEventListener("change",function()
+		{
+			var fechaVar = $('#Modificar_Fecha').val();
+			$.post('ServletTurno', $('#Modificar_Fecha').serialize(),
+				function(responseText)
+				{
+					$('#Modificar_Hinicio').html(responseText);		
+				}		
+			)
+		},false);
 
 </script>
     
